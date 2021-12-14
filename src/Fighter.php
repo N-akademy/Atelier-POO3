@@ -2,89 +2,52 @@
 
 namespace App;
 
-use App\Shield;
-use App\Weapon;
-
 class Fighter
 {
-    public const MAX_LIFE = 100;
+    protected const MAX_LIFE = 100;
 
-    private string $name;
+    protected string $name;
 
-    private int $strength;
-    private int $dexterity;
-    private string $image = 'fighter.svg';
+    protected  int $strength;
+    protected int $dexterity;
+    protected string $image = 'fighter.svg';
 
-    private int $life = self::MAX_LIFE;
+    protected int $life = self::MAX_LIFE;
+    protected int $x;
+    protected int $y;
+    protected float $range = 1;
 
-    private ?Weapon $weapon = null;
-    private ?Shield $shield = null;
 
     public function __construct(
         string $name,
-        int $strength = 10,
-        int $dexterity = 5,
-        string $image = 'fighter.svg'
+        int $strength,
+        int $dexterity,
+        string $image,
+        int $x,
+        int $y,
+        float $range = 1
     ) {
         $this->name = $name;
         $this->strength = $strength;
         $this->dexterity = $dexterity;
         $this->image = $image;
+        $this->x = $x;
+        $this->y = $y;
+        $this->range = $range;
     }
 
     
     public function getDamage(): int
     {
-        $damage = $this->getStrength();
-        if($this->getWeapon() !== null) {
-            $damage += $this->getWeapon()->getDamage();
-        }
-        return $damage;
+        return $this->getStrength();
     }
 
     public function getDefense(): int
     {
-        $defense = $this->getDexterity();
-        if ($this->getShield() !== null) {
-            $defense += $this->getShield()->getProtection();
-        }    
-
-        return $defense;
+        return $this->getDexterity();
     }
 
-     /**
-     * Get the value of weapon
-     */ 
-    public function getWeapon(): ?Weapon
-    {
-        return $this->weapon;
-    }
 
-    /**
-     * Set the value of weapon
-     *
-     */ 
-    public function setWeapon(Weapon $weapon): void
-    {
-        $this->weapon = $weapon;
-    }
-
-    /**
-     * Get the value of shield
-     */ 
-    public function getShield(): ?Shield
-    {
-        return $this->shield;
-    }
-
-    /**
-     * Set the value of shield
-     *
-     */ 
-    public function setShield(?Shield $shield): void
-    {
-        $this->shield = $shield;
-    }
 
     /**
      * Get the value of name
@@ -103,38 +66,12 @@ class Fighter
     }
 
 
-    public function fight(Fighter $adversary): void
-    {
-        $damage = rand(1, $this->getDamage()) - $adversary->getDefense();
-        if ($damage < 0) {
-            $damage = 0;
-        }
-        $adversary->setLife($adversary->getLife() - $damage);
-    }
-
     /**
      * Get the value of life
      */
     public function getLife(): int
     {
         return $this->life;
-    }
-
-    /**
-     * Set the value of life
-     *
-     */
-    public function setLife(int $life)
-    {
-        if ($life < 0) {
-            $life = 0;
-        }
-        $this->life = $life;
-    }
-
-    public function isAlive(): bool
-    {
-        return $this->getLife() > 0;
     }
 
     /**
@@ -146,15 +83,6 @@ class Fighter
     }
 
     /**
-     * Set the value of strength
-     *
-     */
-    public function setStrength($strength): void
-    {
-        $this->strength = $strength;
-    }
-
-    /**
      * Get the value of dexterity
      */
     public function getDexterity(): int
@@ -163,11 +91,35 @@ class Fighter
     }
 
     /**
-     * Set the value of dexterity
-     *
+     * @return int
      */
-    public function setDexterity($dexterity): void
+    public function getX(): int
     {
-        $this->dexterity = $dexterity;
+        return $this->x;
     }
+
+    /**
+     * @return int
+     */
+    public function getY(): int
+    {
+        return $this->y;
+    }
+
+    /**
+     * @return mixed|string
+     */
+    public function getMonsters(): Monster
+    {
+        return $this->name;
+    }
+
+    /**
+     * @return float|int
+     */
+    public function getRange()
+    {
+        return $this->range;
+    }
+
 }
